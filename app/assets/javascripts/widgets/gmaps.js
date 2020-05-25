@@ -61,9 +61,17 @@
                         lngFieldWrapper.val(position.lng);
                     };
                 }
+                var first = function() {
+                    for(var idx=0; idx < arguments.length; idx++) {
+                        if (arguments[idx] !== undefined) return arguments[idx];
+                    }
+                };
                 wrapper.data('gmap-widget', new GMapsPositionWidget(
-                    domElement, domSearchElement, wrapper.data('gmap-lat') || 0, wrapper.data('gmap-lng') || 0,
-                    wrapper.data('gmap-label') || 'You are Here', wrapper.data('gmap-zoom') || 3, editCallback
+                    domElement, domSearchElement,
+                    first(wrapper.data('gmap-lat'), latField.val(), 0),
+                    first(wrapper.data('gmap-lng'), lngField.val(), 0),
+                    wrapper.data('gmap-label') || 'You are Here',
+                    first(wrapper.data('gmap-zoom'), 3), editCallback
                 )).addClass('gmap-started');
             });
         };
