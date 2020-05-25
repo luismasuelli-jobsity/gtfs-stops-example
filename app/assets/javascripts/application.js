@@ -10,7 +10,13 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery
+//= require jquery_ujs
+//= require jquery.remotipart
+//= require jquery-ui/autocomplete
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= require js.cookie
+//= require recurring_select
 //= require_tree .

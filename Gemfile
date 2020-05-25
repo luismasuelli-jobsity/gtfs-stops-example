@@ -3,6 +3,16 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.0'
 
+################## Other RAILS (e.g. server, database, js/css libs) features ##################
+# Remotipart, for remote=true multipart=true forms
+gem 'remotipart', github: 'mshibuya/remotipart'
+# Bootsrap/SASS
+gem 'bootstrap-sass', '~> 3.3.6'
+# Other stuff like timezone management (this only goes in the cookies)
+gem 'browser-timezone-rails'
+################## Recurring Select ####################
+gem 'recurring_select'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.4', '>= 5.2.4.2'
 # Use postgresql as the database for Active Record
@@ -39,6 +49,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rspec-rails'
 end
 
 group :development do
