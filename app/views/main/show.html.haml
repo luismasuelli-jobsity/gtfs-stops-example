@@ -6,7 +6,8 @@
       .form-group
         This feature will import a GTFS stops file containing sample public transport stops, including geographic
         position. As long as the uploaded file is CSV and supporting this subset of GTFS Stops fields, everything
-        will work:
+        will work: stop_id, stop_name, stop_desc, stop_lat, stop_lon, stop_url, location_type, parent_station
+        everything will work as expected.
       .form-group
         .col-md-6.col-lg-6
           = file_field_tag :file, name: :stops_file, class: 'form-control'
