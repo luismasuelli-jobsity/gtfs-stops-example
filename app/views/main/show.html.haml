@@ -5,10 +5,11 @@
         %h2 Import stations data
       .form-group
         This feature will import a GTFS stops file containing sample public transport stops, including geographic
-        position.
+        position. As long as the uploaded file is CSV and supporting this subset of GTFS Stops fields, everything
+        will work:
       .form-group
         .col-md-6.col-lg-6
-          = file_field_tag :file, name: :stops_file
+          = file_field_tag :file, name: :stops_file, class: 'form-control'
         .col-md-6.col-lg-6
           = button_tag id: :replace, type: :button, class: 'btn btn-default' do
             Replace GTFS stops
@@ -22,13 +23,16 @@
   .col-md-6.col-lg-6
     = form_tag '#', id: 'query' do
       .form-group
-        = hidden_field_tag :latitude, 0, id: :latitude
-        = hidden_field_tag :longitude, 0, id: :longitude
-        = render 'widgets/googlemap', style: 'padding-top: 100%; position: relative', zoom: 6, label: 'Reference Point', lat_field: '#latitude', lng_field: '#longitude'
-      .form-group.text-center
-        = button_tag id: :search, type: :button, class: 'btn btn-default' do
-          Search top 5 closest stops
+        = render 'widgets/googlemap', style: 'padding-top: 100%; margin-bottom: 10px; position: relative', zoom: 6, label: 'Reference Point', lat_field: '#latitude', lng_field: '#longitude'
+        .col-md-4.col-lg-4
+          = text_field_tag :latitude, 0, id: :latitude, readonly: true, class: 'form-control'
+        .col-md-4.col-lg-4
+          = text_field_tag :longitude, 0, id: :longitude, readonly: true, class: 'form-control'
+        .col-md-4.col-lg-4
+          = button_tag id: :search, type: :button, class: 'btn btn-default' do
+            Search closest 5
   .col-md-6.col-lg-6{style: 'padding: 10px'}
+    %h4 Results
     %ul#results
 - content_for :js_footer do
   :javascript
@@ -37,8 +41,12 @@
         if (confirm("You are about to REPLACE the whole GTFS Stops records. Are you sure?")) {
           $.ajax({type: "POST", url: 'import?replace=true', data: new FormData($("#import")[0]), processData: false, contentType: false}).done(function() {
             alert("GTFS Stops data was successfully replaced");
-          }).fail(function() {
-            alert("There was an internal error when trying to replace the GTFS Stops data");
+          }).fail(function(xhr) {
+            if (xhr.status === 400) {
+              alert("Request error: " + xhr.responseJSON.message);
+            } else {
+              alert("There was an internal error when trying to replace the GTFS Stops data");
+            }
           });
         }
         e.preventDefault();
@@ -47,25 +55,33 @@
         if (confirm("You are about to append these records to the GTFS Stops data. Are you sure?")) {
           $.ajax({type: "POST", url: 'import?append=true', data: new FormData($("#import")[0]), processData: false, contentType: false}).done(function() {
             alert("GTFS Stops data was successfully appended");
-          }).fail(function() {
-            alert("There was an internal error when trying to append records to the GTFS Stops data");
+          }).fail(function(xhr) {
+            if (xhr.status === 400) {
+              alert("Request error: " + xhr.responseJSON.message);
+            } else {
+              alert("There was an internal error when trying to append records to the GTFS Stops data");
+            }
           });
         }
         e.preventDefault();
       });
       $('#clear').click(function(e) {
         if (confirm("You are about to CLEAR THE WHOLE GTFS Stops data. Are you sure?")) {
-          $.post('import?clear=true').done(function() {
+          $.post('clear').done(function() {
             alert("GTFS Stops data was successfully cleared");
-          }).fail(function() {
-            alert("There was an internal error when trying to clear the whole GTFS Stops data");
+          }).fail(function(xhr) {
+            if (xhr.status === 400) {
+              alert("Request error: " + xhr.responseJSON.message);
+            } else {
+              alert("There was an internal error when trying to clear the whole GTFS Stops data");
+            }
           });
         }
         e.preventDefault();
       });
       $("#search").click(function() {
         $("#results").empty();
-        $("#results").append($('<li/>').text("Loading..."));
+        $('#results h4').text('Loading...');
         $.ajax({type: "POST", url: 'search', data: new FormData($("#query")[0]), processData: false, contentType: false}).done(function(data) {
           $("#results").empty();
           if (data.length) {
@@ -75,8 +91,14 @@
           } else {
             $("#results").append($('<li/>').text("No results - GTFS Stops data is empty"));
           }
-        }).fail(function() {
-          alert("There was an internal error when trying to search among the whole GTFS Stops data");
+        }).fail(function(xhr) {
+          if (xhr.status === 400) {
+            alert("Request error: " + xhr.responseJSON.message);
+          } else {
+            alert("There was an internal error when trying to search among the whole GTFS Stops data");
+          }
+        }).always(function() {
+          $('#results h4').text('Results');
         });
       });
     });
