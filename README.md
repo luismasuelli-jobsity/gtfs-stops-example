@@ -21,4 +21,5 @@ The first section allows to upload a stops.txt file (one stops.txt provided by G
 * Add these stops to the existing ones (provided there are no repeated stops).
 * Clear the current stops dataset.
 
-The
+Then a search can be made in the second interface: the left pane has a marker to drag the center of the search, and the right pane has the results,
+which will show the closest 5 results.
