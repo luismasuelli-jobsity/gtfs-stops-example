@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title
+      GTFS Example
+    %meta{:'http-equiv' => 'CACHE-CONTROL', :content => 'NO-CACHE'}/
+    %meta{:'http-equiv' => 'CACHE-CONTROL', :content => 'NO-STORE'}/
+    %meta{:'http-equiv' => 'Pragma', :content => 'no-cache'}/
+    %meta{:'http-equiv' => 'Expires', :content => '-1'}/
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+    = yield :css_header
+    = yield :js_header
+  %body
+    #content.container
+      = yield
+    = javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.secrets.gmaps_api_key}&libraries=places&callback=initGoogleMapsAPI", async: 'async', defer: 'defer'
+    = yield :js_footer

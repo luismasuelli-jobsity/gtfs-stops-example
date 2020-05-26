@@ -53,9 +53,11 @@
                 var editCallback = null;
                 var latField = wrapper.data('gmap-latfield');
                 var lngField = wrapper.data('gmap-lngfield');
+                var latFieldWrapper;
+                var lngFieldWrapper;
                 if (latField || lngField) {
-                    var latFieldWrapper = latField ? $(latField) : $();
-                    var lngFieldWrapper = lngField ? $(lngField) : $();
+                    latFieldWrapper = latField ? $(latField) : $();
+                    lngFieldWrapper = lngField ? $(lngField) : $();
                     editCallback = function(position) {
                         latFieldWrapper.val(position.lat);
                         lngFieldWrapper.val(position.lng);
@@ -68,8 +70,8 @@
                 };
                 wrapper.data('gmap-widget', new GMapsPositionWidget(
                     domElement, domSearchElement,
-                    first(wrapper.data('gmap-lat'), latField.val(), 0),
-                    first(wrapper.data('gmap-lng'), lngField.val(), 0),
+                    first(wrapper.data('gmap-lat'), latFieldWrapper && latFieldWrapper.val(), 0),
+                    first(wrapper.data('gmap-lng'), lngFieldWrapper && lngFieldWrapper.val(), 0),
                     wrapper.data('gmap-label') || 'You are Here',
                     first(wrapper.data('gmap-zoom'), 3), editCallback
                 )).addClass('gmap-started');
