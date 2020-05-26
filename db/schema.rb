@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2020_05_26_195515) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "cube"
+  enable_extension "earthdistance"
   enable_extension "plpgsql"
+
+  create_table "stops", force: :cascade do |t|
+    t.string "stop_id", limit: 20, null: false
+    t.string "stop_name", limit: 100, null: false
+    t.text "stop_desc", null: false
+    t.decimal "stop_lat", precision: 9, scale: 6, null: false
+    t.decimal "stop_lng", precision: 9, scale: 6, null: false
+    t.string "stop_url", limit: 4095, null: false
+    t.integer "location_type", null: false
+    t.string "parent_station"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "ll_to_earth((stop_lat)::double precision, (stop_lng)::double precision)", name: "geoposition", using: :gist
+    t.index ["stop_id"], name: "index_stops_on_stop_id", unique: true
+  end
 
 end

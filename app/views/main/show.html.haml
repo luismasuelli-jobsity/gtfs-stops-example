@@ -1,6 +1,6 @@
 .row
   .col-md-12.col.lg-12
-    = form_tag id: 'import' do
+    = form_tag '#', id: 'import' do
       .form-group
         %h2 Import stations data
       .form-group
@@ -10,11 +10,11 @@
         .col-md-6.col-lg-6
           = file_field_tag :file, name: :stops_file
         .col-md-6.col-lg-6
-          = button_tag id: :replace, class: 'btn btn-default' do
+          = button_tag id: :replace, type: :button, class: 'btn btn-default' do
             Replace GTFS stops
-          = button_tag id: :append, class: 'btn btn-default' do
+          = button_tag id: :append, type: :button, class: 'btn btn-default' do
             Append GTFS stops
-          = button_tag id: :clear, class: 'btn btn-default' do
+          = button_tag id: :clear, type: :button, class: 'btn btn-default' do
             Clear all GTFS stops
 .row
   .col-md-6.col-lg-6
@@ -33,35 +33,35 @@
 - content_for :js_footer do
   :javascript
     $(function() {
-      $('#replace').click(function() {
+      $('#replace').click(function(e) {
         if (confirm("You are about to REPLACE the whole GTFS Stops records. Are you sure?")) {
-          $.post('import?replace').done(function() {
+          $.ajax({type: "POST", url: 'import?replace=true', data: new FormData($("#import")[0]), processData: false, contentType: false}).done(function() {
             alert("GTFS Stops data was successfully replaced");
           }).fail(function() {
             alert("There was an internal error when trying to replace the GTFS Stops data");
           });
         }
-        return false;
+        e.preventDefault();
       });
-      $('#append').click(function() {
+      $('#append').click(function(e) {
         if (confirm("You are about to append these records to the GTFS Stops data. Are you sure?")) {
-          $.post('import?append').done(function() {
+          $.ajax({type: "POST", url: 'import?append=true', data: new FormData($("#import")[0]), processData: false, contentType: false}).done(function() {
             alert("GTFS Stops data was successfully appended");
           }).fail(function() {
             alert("There was an internal error when trying to append records to the GTFS Stops data");
           });
         }
-        return false;
+        e.preventDefault();
       });
-      $('#clear').click(function() {
+      $('#clear').click(function(e) {
         if (confirm("You are about to CLEAR THE WHOLE GTFS Stops data. Are you sure?")) {
-          $.post('import?clear').done(function() {
+          $.post('import?clear=true').done(function() {
             alert("GTFS Stops data was successfully cleared");
           }).fail(function() {
             alert("There was an internal error when trying to clear the whole GTFS Stops data");
           });
         }
-        return false;
+        e.preventDefault();
       });
       $("#search").click(function() {
         $("#results").empty();
