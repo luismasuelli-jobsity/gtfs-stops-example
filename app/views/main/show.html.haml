@@ -10,13 +10,12 @@
         .col-md-6.col-lg-6
           = file_field_tag :file, name: :stops_file
         .col-md-6.col-lg-6
-          .btn-group{role: 'group', aria:{label: 'Actions'}}
-            = button_tag id: :replace, class: 'btn btn-secondary' do
-              Replace GTFS stops
-            = button_tag id: :append, class: 'btn btn-secondary' do
-              Append GTFS stops
-            = button_tag id: :clear, class: 'btn btn-secondary' do
-              Clear all GTFS stops
+          = button_tag id: :replace, class: 'btn btn-default' do
+            Replace GTFS stops
+          = button_tag id: :append, class: 'btn btn-default' do
+            Append GTFS stops
+          = button_tag id: :clear, class: 'btn btn-default' do
+            Clear all GTFS stops
 .row
   .col-md-6.col-lg-6
     = form_tag id: 'search' do
@@ -27,32 +26,57 @@
         = hidden_field_tag :longitude, 0, id: :longitude
         = render 'widgets/googlemap', style: 'padding-top: 100%; position: relative', zoom: 6, label: 'Reference Point', lat_field: '#latitude', lng_field: '#longitude'
       .form-group.text-center
-        = button_tag id: :search do
+        = button_tag id: :search, class: 'btn btn-default' do
           Search top 5 closest stops
   .col-md-6.col-lg-6{style: 'padding: 10px'}
     %ul#results
-- content_for? :js_footer do
+- content_for :js_footer do
   :javascript
     $(function() {
       $('#replace').click(function() {
-        // TODO pick a different action and perform ajax
-        // TODO instead of an actual submission.
-        //
-        // TODO give an alert with the status of the operation.
+        if (confirm("You are about to REPLACE the whole GTFS Stops records. Are you sure?")) {
+          $.post('import?replace').done(function() {
+            alert("GTFS Stops data was successfully replaced");
+          }).fail(function() {
+            alert("There was an internal error when trying to replace the GTFS Stops data");
+          });
+        }
         return false;
       });
       $('#append').click(function() {
-        // TODO pick a different action and perform ajax
-        // TODO instead of an actual submission.
-        //
-        // TODO give an alert with the status of the operation.
+        if (confirm("You are about to append these records to the GTFS Stops data. Are you sure?")) {
+          $.post('import?append').done(function() {
+            alert("GTFS Stops data was successfully appended");
+          }).fail(function() {
+            alert("There was an internal error when trying to append records to the GTFS Stops data");
+          });
+        }
         return false;
       });
       $('#clear').click(function() {
-        // TODO pick a different action and perform ajax
-        // TODO instead of an actual submission.
-        //
-        // TODO give an alert with the status of the operation.
+        if (confirm("You are about to CLEAR THE WHOLE GTFS Stops data. Are you sure?")) {
+          $.post('import?clear').done(function() {
+            alert("GTFS Stops data was successfully cleared");
+          }).fail(function() {
+            alert("There was an internal error when trying to clear the whole GTFS Stops data");
+          });
+        }
         return false;
+      });
+      $("#search").click(function() {
+        $("#results").empty();
+        $("#results").append($('<li/>').text("Loading..."));
+        $.post('search').done(function(data) {
+          $("#results").empty();
+          if (data.length) {
+            data.forEach(function(element) {
+              $("#results").append($('<li/>').text(element.name + ' @ lat:' + element.latitude + ' lng: ' + element.longitude));
+            });
+          } else {
+            $("#results").append($('<li/>').text("No results - GTFS Stops data is empty"));
+          }
+        }).fail(function() {
+          alert("There was an internal error when trying to search among the whole GTFS Stops data");
+        });
       });
     });

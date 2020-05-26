@@ -1,4 +1,5 @@
 - style = local_assigns[:style] || 'height: 100%'
+- id = local_assigns[:id]
 -# Label to use for the marker of this component.
 - label = local_assigns[:label]
 -# Zoom to use for this component.
@@ -11,5 +12,5 @@
 -# Their current value will serve as initial coordinates if no (lat, lng) variables are present.
 - lat_field = local_assigns[:lat_field]
 - lng_field = local_assigns[:lng_field]
-.google-map{style: style, data:{gmap:{lat: latitude, lng: longitude, zoom: zoom, label: label, latField: lat_field, lngField: lng_field}}}
+.google-map{id: id, style: style, data:{gmap:{lat: latitude, lng: longitude, zoom: zoom, label: label, latField: lat_field, lngField: lng_field}}}
 = text_field_tag :search, '', autocomplete: 'off', style: 'width: 60%; display: inline-block', class: 'form-control gmap-autocomplete' if local_assigns[:with_search]
