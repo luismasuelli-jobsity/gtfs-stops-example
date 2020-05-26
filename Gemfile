@@ -7,7 +7,7 @@ ruby '2.7.0'
 # Remotipart, for remote=true multipart=true forms
 gem 'remotipart', github: 'mshibuya/remotipart'
 # Bootsrap/SASS
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.4.1'
 # Other stuff like timezone management (this only goes in the cookies)
 gem 'browser-timezone-rails'
 ################## Recurring Select ####################
