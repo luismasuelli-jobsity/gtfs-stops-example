@@ -6,7 +6,7 @@ Installation
 
 This project uses rails 5.2.4 in ruby 2.7.0.
 
-A modern version of PostgreSQL is also needed (tested with 12,1). A dummy setup is done in the database.yml file. Tune the credentials accordingly.
+A modern version of PostgreSQL is also needed (tested with 12.1). A dummy setup is done in the database.yml file. Tune the credentials accordingly.
 
 To test this app, just set it up (`rails db:setup`) and then run it (`rails s`) once everything is appropriately setup.
 
