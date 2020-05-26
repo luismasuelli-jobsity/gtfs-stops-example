@@ -17,16 +17,16 @@
           = button_tag id: :clear, type: :button, class: 'btn btn-default' do
             Clear all GTFS stops
 .row
+  .col-md-12.col-lg-12
+    %h2 Search closest stations
   .col-md-6.col-lg-6
-    = form_tag id: 'search' do
-      .form-group
-        %h2 Search closest stations
+    = form_tag '#', id: 'query' do
       .form-group
         = hidden_field_tag :latitude, 0, id: :latitude
         = hidden_field_tag :longitude, 0, id: :longitude
         = render 'widgets/googlemap', style: 'padding-top: 100%; position: relative', zoom: 6, label: 'Reference Point', lat_field: '#latitude', lng_field: '#longitude'
       .form-group.text-center
-        = button_tag id: :search, class: 'btn btn-default' do
+        = button_tag id: :search, type: :button, class: 'btn btn-default' do
           Search top 5 closest stops
   .col-md-6.col-lg-6{style: 'padding: 10px'}
     %ul#results
@@ -66,11 +66,11 @@
       $("#search").click(function() {
         $("#results").empty();
         $("#results").append($('<li/>').text("Loading..."));
-        $.post('search').done(function(data) {
+        $.ajax({type: "POST", url: 'search', data: new FormData($("#query")[0]), processData: false, contentType: false}).done(function(data) {
           $("#results").empty();
           if (data.length) {
             data.forEach(function(element) {
-              $("#results").append($('<li/>').text(element.name + ' @ lat:' + element.latitude + ' lng: ' + element.longitude));
+              $("#results").append($('<li/>').text(element.stop_name + ' (' + element.stop_id + ') @ lat:' + element.stop_lat + ' lng: ' + element.stop_lng));
             });
           } else {
             $("#results").append($('<li/>').text("No results - GTFS Stops data is empty"));

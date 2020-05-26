@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root "main#show"
   post :import, controller: :main
   post :search, controller: :main
+  post :clear, controller: :main
 end

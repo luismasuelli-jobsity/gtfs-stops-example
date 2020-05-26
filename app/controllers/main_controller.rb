@@ -36,7 +36,13 @@ class MainController < ApplicationController
   end
 
   def search
-    render json: []
+    latitude = params[:latitude]
+    longitude = params[:longitude]
+    if latitude.present? and longitude.present?
+      render json: Stop.nearby(latitude, longitude)
+    else
+      render json: { message: "missing data" }, status: 400
+    end
   end
 
 private
