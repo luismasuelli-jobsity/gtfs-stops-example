@@ -26,9 +26,9 @@
       .form-group
         = render 'widgets/googlemap', style: 'padding-top: 100%; margin-bottom: 10px; position: relative', zoom: 6, label: 'Reference Point', lat_field: '#latitude', lng_field: '#longitude'
         .col-md-4.col-lg-4
-          = text_field_tag :latitude, 0, id: :latitude, readonly: true, class: 'form-control'
+          = number_field_tag :latitude, 0, id: :latitude, min: -90, max: 90, step: 0.000001, class: 'form-control'
         .col-md-4.col-lg-4
-          = text_field_tag :longitude, 0, id: :longitude, readonly: true, class: 'form-control'
+          = number_field_tag :longitude, 0, id: :longitude, min: -180, max: 180, step: 0.000001, class: 'form-control'
         .col-md-4.col-lg-4
           = button_tag id: :search, type: :button, class: 'btn btn-default' do
             Search closest 5

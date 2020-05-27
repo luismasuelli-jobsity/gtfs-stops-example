@@ -12,7 +12,7 @@
                 marker.setPosition(position);
                 map.panTo(position);
                 if (editCallback) {
-                    editCallback(position);
+                    editCallback(marker.getPosition());
                 }
             };
             gmaps_pw.getPosition = function() {
@@ -59,9 +59,17 @@
                     latFieldWrapper = latField ? $(latField) : $();
                     lngFieldWrapper = lngField ? $(lngField) : $();
                     editCallback = function(position) {
-                        latFieldWrapper.val(position.lat);
-                        lngFieldWrapper.val(position.lng);
+                        latFieldWrapper.val(position.lat().toFixed(6));
+                        lngFieldWrapper.val(position.lng().toFixed(6));
                     };
+                    latFieldWrapper.blur(function() {
+                        var position = wrapper.data('gmap-widget').getPosition();
+                        wrapper.data('gmap-widget').setPosition({lat: parseFloat($(this).val()), lng: position.lng});
+                    });
+                    lngFieldWrapper.blur(function() {
+                        var position = wrapper.data('gmap-widget').getPosition();
+                        wrapper.data('gmap-widget').setPosition({lat: position.lat, lng: parseFloat($(this).val())});
+                    });
                 }
                 var first = function() {
                     for(var idx=0; idx < arguments.length; idx++) {
